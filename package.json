@@ -1,0 +1,14 @@
+{
+  "name": "overt_32harmony_32_40platformer_41_32_45_32copy",
+  "displayName": "Overt Harmony (Platformer) - Copy",
+  "version": "1.0.0",
+  "description": "Overt Harmony (Platformer) - Copy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": ""
+}

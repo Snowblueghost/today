@@ -1,0 +1,6 @@
+# Cordova-specific files
+platforms/
+plugins/
+node_modules/
+.gradle/
+build/

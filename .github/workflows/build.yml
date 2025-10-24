@@ -1,0 +1,50 @@
+name: Build Android APK
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+
+      - name: Install Cordova
+        run: npm install -g cordova
+
+      - name: Clean Existing Platforms (Critical Fix!)
+        run: |
+          rm -rf platforms/
+          rm -rf plugins/
+
+      - name: Install Android SDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openjdk-11-jdk
+          mkdir -p $HOME/android-sdk
+          cd $HOME/android-sdk
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+          unzip -q commandlinetools-linux-*.zip
+          mkdir -p cmdline-tools/latest
+          mv cmdline-tools/* cmdline-tools/latest/ || true
+          echo "$HOME/android-sdk/cmdline-tools/latest" >> $GITHUB_PATH
+
+      - name: Install Android Packages
+        run: |
+          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-34" "build-tools;34.0.0"
+
+      - name: Add Android Platform
+        run: cordova platform add android@13.0.0
+
+      - name: Build APK
+        run: cordova build android
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug.apk
+          path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
